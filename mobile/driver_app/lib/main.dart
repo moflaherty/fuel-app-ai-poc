@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:driver_app/map_screen.dart';
 
 void main() {
   runApp(const DriverApp());
@@ -137,93 +138,94 @@ class _LoginScreenState extends State<LoginScreen> {
                       key: _formKey,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Container(
-                          width: 84,
-                          height: 84,
-                          margin: const EdgeInsets.only(bottom: 18),
-                          decoration: BoxDecoration(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.primaryContainer,
-                            borderRadius: BorderRadius.circular(20),
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            width: 84,
+                            height: 84,
+                            margin: const EdgeInsets.only(bottom: 18),
+                            decoration: BoxDecoration(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.primaryContainer,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Icon(
+                              Icons.local_gas_station_outlined,
+                              size: 40,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
                           ),
-                          child: Icon(
-                            Icons.local_gas_station_outlined,
-                            size: 40,
-                            color: Theme.of(context).colorScheme.primary,
+                          Text(
+                            'Driver App',
+                            style: Theme.of(context).textTheme.headlineMedium,
+                            textAlign: TextAlign.center,
                           ),
-                        ),
-                        Text(
-                          'Driver App',
-                          style: Theme.of(context).textTheme.headlineMedium,
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 20),
-                        Text(
-                          'Welcome Back',
-                          style: Theme.of(context).textTheme.headlineSmall,
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          'Sign in to continue',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 30),
-                        TextFormField(
-                          controller: _emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          textInputAction: TextInputAction.next,
-                          decoration: const InputDecoration(
-                            labelText: 'Email',
-                            hintText: 'name@example.com',
-                            prefixIcon: Icon(Icons.email_outlined),
+                          const SizedBox(height: 20),
+                          Text(
+                            'Welcome Back',
+                            style: Theme.of(context).textTheme.headlineSmall,
+                            textAlign: TextAlign.center,
                           ),
-                          validator: _validateEmail,
-                        ),
-                        const SizedBox(height: 18),
-                        TextFormField(
-                          controller: _passwordController,
-                          obscureText: _isPasswordHidden,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          textInputAction: TextInputAction.done,
-                          onChanged: (_) => _formKey.currentState?.validate(),
-                          onFieldSubmitted: (_) => _submitLogin(),
-                          decoration: InputDecoration(
-                            labelText: 'Password',
-                            prefixIcon: const Icon(Icons.lock_outline),
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _isPasswordHidden = !_isPasswordHidden;
-                                });
-                              },
-                              icon: Icon(
-                                _isPasswordHidden
-                                    ? Icons.visibility_outlined
-                                    : Icons.visibility_off_outlined,
+                          const SizedBox(height: 10),
+                          Text(
+                            'Sign in to continue',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 30),
+                          TextFormField(
+                            controller: _emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.next,
+                            decoration: const InputDecoration(
+                              labelText: 'Email',
+                              hintText: 'name@example.com',
+                              prefixIcon: Icon(Icons.email_outlined),
+                            ),
+                            validator: _validateEmail,
+                          ),
+                          const SizedBox(height: 18),
+                          TextFormField(
+                            controller: _passwordController,
+                            obscureText: _isPasswordHidden,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            textInputAction: TextInputAction.done,
+                            onChanged: (_) => _formKey.currentState?.validate(),
+                            onFieldSubmitted: (_) => _submitLogin(),
+                            decoration: InputDecoration(
+                              labelText: 'Password',
+                              prefixIcon: const Icon(Icons.lock_outline),
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _isPasswordHidden = !_isPasswordHidden;
+                                  });
+                                },
+                                icon: Icon(
+                                  _isPasswordHidden
+                                      ? Icons.visibility_outlined
+                                      : Icons.visibility_off_outlined,
+                                ),
+                              ),
+                            ),
+                            validator: _validatePassword,
+                          ),
+                          const SizedBox(height: 28),
+                          SizedBox(
+                            width: double.infinity,
+                            child: FilledButton(
+                              onPressed: _submitLogin,
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 14),
+                                child: Text('Login'),
                               ),
                             ),
                           ),
-                          validator: _validatePassword,
-                        ),
-                        const SizedBox(height: 28),
-                        SizedBox(
-                          width: double.infinity,
-                          child: FilledButton(
-                            onPressed: _submitLogin,
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 14),
-                              child: Text('Login'),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -281,6 +283,22 @@ class DashboardScreen extends StatelessWidget {
                               'You are now logged in.',
                               style: Theme.of(context).textTheme.bodyMedium,
                               textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 20),
+                            FilledButton.icon(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const MapScreen(),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(Icons.map_outlined),
+                              label: const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 12),
+                                child: Text('Open Map'),
+                              ),
                             ),
                           ],
                         ),
