@@ -23,6 +23,7 @@ class _AppRoot extends StatefulWidget {
 
 class _AppRootState extends State<_AppRoot> {
   bool _isLoggedIn = false;
+  ThemeMode _themeMode = ThemeMode.light;
 
   void _handleLogin() {
     setState(() {
@@ -36,6 +37,13 @@ class _AppRootState extends State<_AppRoot> {
     });
   }
 
+  void _handleThemeToggle() {
+    setState(() {
+      _themeMode =
+          _themeMode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -44,17 +52,40 @@ class _AppRootState extends State<_AppRoot> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.dark,
+        ),
+        useMaterial3: true,
+      ),
+      themeMode: _themeMode,
       home: _isLoggedIn
-          ? DashboardScreen(onLogout: _handleLogout)
-          : LoginScreen(onLoginSuccess: _handleLogin),
+          ? DashboardScreen(
+              onLogout: _handleLogout,
+              onThemeToggle: _handleThemeToggle,
+              isDarkMode: _themeMode == ThemeMode.dark,
+            )
+          : LoginScreen(
+              onLoginSuccess: _handleLogin,
+              onThemeToggle: _handleThemeToggle,
+              isDarkMode: _themeMode == ThemeMode.dark,
+            ),
     );
   }
 }
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key, required this.onLoginSuccess});
+  const LoginScreen({
+    super.key,
+    required this.onLoginSuccess,
+    required this.onThemeToggle,
+    required this.isDarkMode,
+  });
 
   final VoidCallback onLoginSuccess;
+  final VoidCallback onThemeToggle;
+  final bool isDarkMode;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -113,6 +144,19 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          IconButton(
+            tooltip: widget.isDarkMode ? 'Switch to light mode' : 'Switch to dark mode',
+            icon: Icon(
+              widget.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+            ),
+            onPressed: widget.onThemeToggle,
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -237,14 +281,30 @@ class _LoginScreenState extends State<LoginScreen> {
 }
 
 class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({super.key, required this.onLogout});
+  const DashboardScreen({
+    super.key,
+    required this.onLogout,
+    required this.onThemeToggle,
+    required this.isDarkMode,
+  });
 
   final VoidCallback onLogout;
+  final VoidCallback onThemeToggle;
+  final bool isDarkMode;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Dashboard')),
+      appBar: AppBar(
+        title: const Text('Dashboard'),
+        actions: [
+          IconButton(
+            tooltip: isDarkMode ? 'Switch to light mode' : 'Switch to dark mode',
+            icon: Icon(isDarkMode ? Icons.light_mode : Icons.dark_mode),
+            onPressed: onThemeToggle,
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),

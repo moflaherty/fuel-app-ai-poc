@@ -5,7 +5,13 @@ import 'package:driver_app/main.dart';
 
 void main() {
   Widget buildDashboardScreen({VoidCallback? onLogout}) {
-    return MaterialApp(home: DashboardScreen(onLogout: onLogout ?? () {}));
+    return MaterialApp(
+      home: DashboardScreen(
+        onLogout: onLogout ?? () {},
+        onThemeToggle: () {},
+        isDarkMode: false,
+      ),
+    );
   }
 
   group('DashboardScreen', () {

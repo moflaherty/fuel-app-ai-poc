@@ -6,7 +6,11 @@ import 'package:driver_app/main.dart';
 void main() {
   Widget buildLoginScreen({VoidCallback? onLoginSuccess}) {
     return MaterialApp(
-      home: LoginScreen(onLoginSuccess: onLoginSuccess ?? () {}),
+      home: LoginScreen(
+        onLoginSuccess: onLoginSuccess ?? () {},
+        onThemeToggle: () {},
+        isDarkMode: false,
+      ),
     );
   }
 
