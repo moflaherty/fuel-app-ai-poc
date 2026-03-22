@@ -40,8 +40,9 @@ class _AppRootState extends State<_AppRoot> {
 
   void _handleThemeToggle() {
     setState(() {
-      _themeMode =
-          _themeMode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
+      _themeMode = _themeMode == ThemeMode.dark
+          ? ThemeMode.light
+          : ThemeMode.dark;
     });
   }
 
@@ -150,10 +151,15 @@ class _LoginScreenState extends State<LoginScreen> {
         elevation: 0,
         actions: [
           IconButton(
-            tooltip: widget.isDarkMode ? 'Switch to light mode' : 'Switch to dark mode',
-            icon: Icon(
-              widget.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+            iconSize: 31.2,
+            constraints: const BoxConstraints.tightFor(
+              width: 62.4,
+              height: 62.4,
             ),
+            tooltip: widget.isDarkMode
+                ? 'Switch to light mode'
+                : 'Switch to dark mode',
+            icon: Icon(widget.isDarkMode ? Icons.light_mode : Icons.dark_mode),
             onPressed: widget.onThemeToggle,
           ),
         ],
@@ -301,7 +307,9 @@ class DashboardScreen extends StatelessWidget {
         title: const Text('Dashboard'),
         actions: [
           IconButton(
-            tooltip: isDarkMode ? 'Switch to light mode' : 'Switch to dark mode',
+            tooltip: isDarkMode
+                ? 'Switch to light mode'
+                : 'Switch to dark mode',
             icon: Icon(isDarkMode ? Icons.light_mode : Icons.dark_mode),
             onPressed: onThemeToggle,
           ),
